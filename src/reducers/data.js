@@ -25,10 +25,10 @@ export function dataIsLoading(state = false, { type, isLoading }) {
   }
 }
 
-export function data(state = [], { type, serries, meta }) {
+export function data(state = [], { type, series, meta }) {
   switch (type) {
     case DATA_FETCH_DATA_SUCCESS:
-      return { ...state, serries, meta }
+      return { ...state, series, meta }
 
     default:
       return state

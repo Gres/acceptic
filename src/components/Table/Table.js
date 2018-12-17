@@ -1,14 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchData } from '../../actions/data'
+import Meta from '../Meta/Meta'
 import _ from 'lodash'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+
 const mapStateToProps = state => ({
   information: _.get(state, 'data.meta.information', ''),
   symbol: _.get(state, 'data.meta.symbol', ''),
   lastRefreshed: _.get(state, 'data.meta.lastRefreshed', ''),
   outputSize: _.get(state, 'data.meta.outputSize', ''),
   timeZone: _.get(state, 'data.meta.timeZone', ''),
-  // series: state.data.
+  series: _.get(state, 'data.series', []),
   hasErrored: state.itemsHasErrored,
   isLoading: state.itemsIsLoading
 })
@@ -32,26 +36,58 @@ class Table extends Component {
     return (
       <div className="Table">
         <h1>Table</h1>
-        <dl>
-          <dt>Information</dt>
-          <dd>{this.props.information}</dd>
-        </dl>
-        <dl>
-          <dt>Symbol</dt>
-          <dd>{this.props.symbol}</dd>
-        </dl>
-        <dl>
-          <dt>Last refreshed</dt>
-          <dd>{this.props.lastRefreshed}</dd>
-        </dl>
-        <dl>
-          <dt>Output Size</dt>
-          <dd>{this.props.outputSize}</dd>
-        </dl>
-        <dl>
-          <dt>TimeZone</dt>
-          <dd>{this.props.timeZone}</dd>
-        </dl>
+        <Meta
+          information={this.props.information}
+          symbol={this.props.symbol}
+          lastRefreshed={this.props.lastRefreshed}
+          outputSize={this.props.outputSize}
+          timeZone={this.props.timeZone}
+        />
+        <ReactTable
+          data={this.props.series}
+          columns={[
+            {
+              Header: 'date',
+              accessor: 'dateStr'
+            },
+            {
+              Header: 'open',
+              accessor: 'open'
+            },
+            {
+              Header: 'high',
+              accessor: 'high'
+            },
+            {
+              Header: 'low',
+              accessor: 'low'
+            },
+            {
+              Header: 'close',
+              accessor: 'close'
+            },
+            {
+              Header: 'adjustedClose',
+              accessor: 'adjustedClose'
+            },
+            {
+              Header: 'volume',
+              accessor: 'volume'
+            },
+            {
+              Header: 'dividendAmount',
+              accessor: 'dividendAmount'
+            }
+          ]}
+          defaultSorted={[
+            {
+              id: 'dateStr',
+              desc: true
+            }
+          ]}
+          defaultPageSize={10}
+          className="-striped -highlight"
+        />
       </div>
     )
   }
